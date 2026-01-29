@@ -1,0 +1,273 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  FEMALE
+  MALE
+  NON_BINARY
+  OTHER
+  UNDISCLOSED
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  VOID
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  BANK_TRANSFER
+  INSURANCE
+  OTHER
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  email         String?    @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?
+  roles         UserRole[]
+  accounts      Account[]
+  sessions      Session[]
+  auditLogs     AuditLog[] @relation("AuditActor")
+  files         File[]     @relation("FileUploader")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Role {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  description String?
+  users       UserRole[]
+  permissions RolePermission[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Permission {
+  id          String           @id @default(cuid())
+  key         String           @unique
+  description String?
+  roles       RolePermission[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model UserRole {
+  userId     String
+  roleId     String
+  assignedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role       Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@index([roleId])
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+}
+
+model Patient {
+  id                      String        @id @default(cuid())
+  firstName               String
+  lastName                String
+  dateOfBirth             DateTime?
+  gender                  Gender?
+  phone                   String?
+  email                   String?
+  address                 String?
+  emergencyContactName    String?
+  emergencyContactPhone   String?
+  insuranceProvider       String?
+  insuranceMemberId       String?
+  notes                   String?
+  appointments            Appointment[]
+  invoices                Invoice[]
+  files                   File[]
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+
+  @@index([lastName, firstName])
+}
+
+model Provider {
+  id           String        @id @default(cuid())
+  firstName    String
+  lastName     String
+  specialty    String?
+  phone        String?
+  email        String?
+  npi          String?
+  availability String?
+  active       Boolean       @default(true)
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([lastName, firstName])
+}
+
+model Appointment {
+  id          String            @id @default(cuid())
+  patientId   String
+  providerId  String
+  scheduledAt DateTime
+  status      AppointmentStatus @default(SCHEDULED)
+  reason      String?
+  notes       String?
+  patient     Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  provider    Provider          @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  invoices    Invoice[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([patientId])
+  @@index([providerId])
+  @@index([scheduledAt])
+}
+
+model Invoice {
+  id            String        @id @default(cuid())
+  patientId     String
+  appointmentId String?
+  status        InvoiceStatus @default(DRAFT)
+  totalCents    Int
+  currency      String        @default("USD")
+  issuedAt      DateTime      @default(now())
+  dueAt         DateTime?
+  paidAt        DateTime?
+  patient       Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  appointment   Appointment?  @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+  payments      Payment[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([patientId])
+  @@index([appointmentId])
+  @@index([status])
+}
+
+model Payment {
+  id          String        @id @default(cuid())
+  invoiceId   String
+  amountCents Int
+  method      PaymentMethod @default(CARD)
+  status      PaymentStatus @default(COMPLETED)
+  paidAt      DateTime?
+  invoice     Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([invoiceId])
+  @@index([status])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  action     String
+  entityType String
+  entityId   String?
+  metadata   Json?
+  actor      User?    @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+  createdAt  DateTime @default(now())
+
+  @@index([actorId])
+  @@index([entityType, entityId])
+}
+
+model File {
+  id           String   @id @default(cuid())
+  patientId    String?
+  uploadedById String?
+  filename     String
+  mimeType     String?
+  sizeBytes    Int?
+  url          String
+  patient      Patient? @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  uploadedBy   User?    @relation("FileUploader", fields: [uploadedById], references: [id], onDelete: SetNull)
+  createdAt    DateTime @default(now())
+
+  @@index([patientId])
+  @@index([uploadedById])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
