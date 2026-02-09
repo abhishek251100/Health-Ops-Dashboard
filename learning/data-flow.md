@@ -21,7 +21,7 @@ flowchart LR
 ```
 
 ### Real example in this project
-File: `app/(app)/patients/page.tsx`
+File: `app/patients/page.tsx`
 - `createPatient` is a server action.
 - It validates with `patientSchema`.
 - It saves with `prisma.patient.create`.
@@ -40,3 +40,5 @@ It is still secure because the code runs on the server, not in the browser.
 ### Reference docs
 - Server Actions: https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions
 - Data fetching patterns: https://nextjs.org/docs/app/building-your-application/data-fetching
+
+For **all types of calls** (API, server actions, Route Handlers, client fetch) from the basics up, see `data-fetching-and-calls.md` in this folder. For a full list of links, see `REFERENCES.md`.

@@ -8,11 +8,11 @@ This project is built like a real product. Use this guide to learn step by step.
 - Data is stored in PostgreSQL using Prisma.
 
 ### 2) Where to look first
-- `app/(app)/dashboard/page.tsx`: KPI dashboard and tables.
-- `app/(app)/patients/page.tsx`: patient CRUD + document links.
-- `app/(app)/appointments/page.tsx`: scheduling and status updates.
-- `app/(app)/billing/page.tsx`: invoices and payments.
-- `app/(app)/admin/page.tsx`: roles, permissions, users.
+- `app/dashboard/page.tsx`: KPI dashboard and tables.
+- `app/patients/page.tsx`: patient CRUD + document links.
+- `app/appointments/page.tsx`: scheduling and status updates.
+- `app/billing/page.tsx`: invoices and payments.
+- `app/admin/page.tsx`: roles, permissions, users.
 
 ### 3) How data moves
 1. User submits a form.
@@ -34,3 +34,9 @@ This project is built like a real product. Use this guide to learn step by step.
 - Add a new field to a model (Prisma + form + table).
 - Add a new permission and use it in a page.
 - Add a new KPI to the dashboard.
+
+### 7) Full learning path, references & videos
+- **`learning/README.md`** — recommended order (architecture → data flow → API/calls → server actions → Prisma → auth → UI → tests → exercises → glossary).
+- **`learning/REFERENCES.md`** — all reference docs in one place (Next.js, Prisma, Zod, etc.).
+- **`learning/videos-and-resources.md`** — beginner-friendly videos and courses (current, not outdated).
+- **`learning/data-fetching-and-calls.md`** — basics of API calls and every type of call used in this app.

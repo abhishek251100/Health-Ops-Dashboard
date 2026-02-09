@@ -19,7 +19,7 @@ flowchart TD
 ```
 
 ### What each layer does
-- UI: renders forms and tables. Example: `app/(app)/patients/page.tsx`.
+- UI: renders forms and tables. Example: `app/patients/page.tsx`.
 - Server actions: run on the server and talk to the database.
 - Database: stores real data. Schema lives in `prisma/schema.prisma`.
 

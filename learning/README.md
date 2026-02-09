@@ -6,16 +6,22 @@ Read in order. Each file builds on the previous one. It is designed to help you 
 ### Recommended order
 1) `architecture.md`
 2) `data-flow.md`
-3) `server-actions-validation.md`
-4) `prisma-data-model.md`
-5) `auth-rbac.md`
-6) `ui-tailwind.md`
-7) `tests-ci.md`
-8) `exercises.md`
-9) `glossary.md`
+3) `data-fetching-and-calls.md` — API calls, server actions, Route Handlers, client vs server (basics)
+4) `server-actions-validation.md`
+5) `prisma-data-model.md`
+6) `auth-rbac.md`
+7) `ui-tailwind.md`
+8) `tests-ci.md`
+9) `exercises.md`
+10) `glossary.md`
+
+**Reference & videos (use anytime)**  
+- `REFERENCES.md` — all official docs (Next.js, Prisma, Zod, etc.) in one place  
+- `videos-and-resources.md` — beginner-friendly videos and courses (current, not outdated)
 
 ### What you will understand by the end
 - How Next.js pages render and fetch data
+- What an API call is and all types of calls we use (server fetch, server actions, API routes, client fetch)
 - How server actions save and validate input
 - How Prisma maps code to the database
 - How login, sessions, roles, and permissions work
@@ -30,12 +36,12 @@ Read in order. Each file builds on the previous one. It is designed to help you 
 
 ### Where to start if you feel stuck
 - Start with `architecture.md` and `data-flow.md`.
-- Then open `app/(app)/patients/page.tsx` and follow one form.
+- Then open `app/patients/page.tsx` and follow one form.
 - Use `server-actions-validation.md` to understand every line.
 
 ### Real project files to keep open
-- `app/(app)/dashboard/page.tsx`
-- `app/(app)/patients/page.tsx`
+- `app/dashboard/page.tsx`
+- `app/patients/page.tsx`
 - `lib/validators.ts`
 - `lib/db.ts`
 - `prisma/schema.prisma`
@@ -49,7 +55,6 @@ Read in order. Each file builds on the previous one. It is designed to help you 
 ### If you want more
 If you want deeper, line‑by‑line explanations of any page, tell me the file name.
 
-### External references (dashboard standards + UI patterns)
-- Dashboard UX patterns: https://www.nngroup.com/articles/dashboard-design/
-- Data table UX: https://www.nngroup.com/articles/tables/
-- Form UX: https://www.nngroup.com/articles/web-form-design/
+### Reference docs & videos
+- **REFERENCES.md** — full list of updated official docs (Next.js, Prisma, Zod, Tailwind, Vitest, UX).
+- **videos-and-resources.md** — current beginner videos and courses (Next.js Learn, official channels); no old or outdated material.
