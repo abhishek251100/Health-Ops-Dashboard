@@ -16,6 +16,11 @@ interface AdminUser {
   roles: { roleId: string; role: { name: string } }[];
 }
 
+interface AdminRole {
+  id: string;
+  name: string;
+}
+
 export default async function AdminPage() {
   await requirePermission("admin.manage");
 
@@ -84,7 +89,7 @@ export default async function AdminPage() {
                       {user.roles.length === 0 ? (
                         <p className="text-sm text-muted-foreground">No roles assigned.</p>
                       ) : (
-                        user.roles.map((role) => (
+                        user.roles.map((role: AdminUser["roles"][number]) => (
                           <div key={role.roleId} className="flex items-center gap-2">
                             <span>{role.role.name}</span>
                             <form action={removeRole.bind(null, user.id, role.roleId)}>
@@ -103,7 +108,7 @@ export default async function AdminPage() {
                           className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
                         >
                           <option value="">Select role</option>
-                          {roles.map((role) => (
+                          {roles.map((role: AdminRole) => (
                             <option key={role.id} value={role.id}>
                               {role.name}
                             </option>
