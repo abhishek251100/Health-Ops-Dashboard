@@ -9,6 +9,13 @@ import { requirePermission } from "@/lib/rbac";
 
 import { assignRole, createUser, removeRole } from "./actions";
 
+interface AdminUser {
+  id: string;
+  name: string | null;
+  email: string | null;
+  roles: { roleId: string; role: { name: string } }[];
+}
+
 export default async function AdminPage() {
   await requirePermission("admin.manage");
 
@@ -69,7 +76,7 @@ export default async function AdminPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                users.map((user) => (
+                users.map((user: AdminUser) => (
                   <TableRow key={user.id}>
                     <TableCell>{user.name ?? "—"}</TableCell>
                     <TableCell>{user.email ?? "—"}</TableCell>
