@@ -1,10 +1,12 @@
 ## Tests + CI (why they matter)
 
 ### Tests
-We use Vitest for fast unit tests.
-File: `tests/validators.test.ts`
+We use Vitest for fast unit tests. Config: `vitest.config.mts` (path alias `@`, Node environment).
 
-This test checks that your validators work.
+- **`tests/validators.test.ts`** — checks Zod validators (e.g. patient schema).
+- **`tests/format.test.ts`** — checks display helpers (`formatMoney`, `formatShortDate` from `lib/format.ts`).
+
+Together these give confidence that validation and formatting behave as expected.
 
 Example test:
 ```ts

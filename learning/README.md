@@ -15,6 +15,9 @@ Read in order. Each file builds on the previous one. It is designed to help you 
 9) `exercises.md`
 10) `glossary.md`
 
+**Master every file**  
+- **`PROJECT-MAP.md`** — lists **every** important file in the app, what it does, and which doc explains it. Use it to go through the codebase file by file (minor and major details).
+
 **Reference & videos (use anytime)**  
 - `REFERENCES.md` — all official docs (Next.js, Prisma, Zod, etc.) in one place  
 - `videos-and-resources.md` — beginner-friendly videos and courses (current, not outdated)
@@ -33,6 +36,9 @@ Read in order. Each file builds on the previous one. It is designed to help you 
 - Open the real project file it references.
 - Find the same pattern in the code.
 - Make a tiny change and run the app.
+
+### Red squiggles: "Cannot find module"
+If the editor shows errors like **Cannot find module 'next/cache'** or **Cannot find module 'bcryptjs'** (or `next/navigation`, `@/lib/...`, etc.), that is usually a **setup** issue, not a mistake in the learning docs or the code. Run `npm install`, run `npx prisma generate`, and **open the `Health-Ops-Dashboard` folder** (not the parent) in your editor so the IDE sees `node_modules` and path aliases. See **docs/setup.md** → Troubleshooting.
 
 ### Where to start if you feel stuck
 - Start with `architecture.md` and `data-flow.md`.

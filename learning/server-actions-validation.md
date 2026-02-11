@@ -19,7 +19,7 @@ revalidatePath("/patients");
 - `patientSchema.safeParse(...)`: validates user input.
 - `if (!parsed.success) return;`: stops if input is bad.
 - `prisma.patient.create(...)`: writes to DB.
-- `revalidatePath(...)`: refreshes the page data.
+- `revalidatePath(...)`: (from `next/cache`) tells Next.js to refresh server-rendered data for that path so the UI shows the latest data.
 
 ### Why validate
 Forms can be manipulated. Validation protects your database.
